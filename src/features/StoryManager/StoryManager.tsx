@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useInAppStorySDK } from "./hooks/useInAppStorySDK"
 
 interface StoryManagerProps {
@@ -7,13 +7,14 @@ interface StoryManagerProps {
 
 export const StoryManager = ({ children }: StoryManagerProps) => {
     const { isLoading, IAS } = useInAppStorySDK()
+    const [storyManager, setStoryManager] = useState(null)
 
     useEffect(() => {
-        if (!isLoading) return
+        if (isLoading) return
 
         const storyManagerConfig = {
-            apiKey: process.env.INAPPSTORY_API_KEY!,
-            userId: process.env.INAPPSTORY_USER_ID!,
+            apiKey: process.env.REACT_APP_INAPPSTORY_API_KEY!,
+            userId: process.env.REACT_APP_INAPPSTORY_USER_ID!,
             tags: [],
             placeholders: {
                 user: "Guest",
@@ -24,9 +25,10 @@ export const StoryManager = ({ children }: StoryManagerProps) => {
             lang: "ru",
         }
 
-        new window.IAS.StoryManager(storyManagerConfig)
+        const storyManager = new window.IAS.StoryManager(storyManagerConfig)
+        setStoryManager(storyManager)
     }, [isLoading])
 
-    if (isLoading) return null
-    return children
+    if (isLoading || !storyManager) return null
+    return <>{children}</>
 }

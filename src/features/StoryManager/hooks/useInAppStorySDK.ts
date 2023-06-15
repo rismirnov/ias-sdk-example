@@ -11,7 +11,7 @@ interface UseInAppStorySDKResult {
 }
 
 export const useInAppStorySDK = (): UseInAppStorySDKResult => {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [instance, setInstance] = useState<any>()
 
     useEffect(() => {
@@ -22,7 +22,7 @@ export const useInAppStorySDK = (): UseInAppStorySDKResult => {
             if (d.getElementById(id)) return st
             js = d.createElement(s) as HTMLScriptElement
             js.id = id
-            js.src = process.env.INAPPSTORY_SDK_SRC!
+            js.src = process.env.REACT_APP_INAPPSTORY_SDK_SRC!
             js.async = true
             fjs.parentNode?.insertBefore(js, fjs)
             st._e = []
@@ -33,7 +33,7 @@ export const useInAppStorySDK = (): UseInAppStorySDKResult => {
         })(document, "script", "ias-wjs")
 
         window.IASReady.ready(() => {
-            setIsLoading(true)
+            setIsLoading(false)
             setInstance(window.IAS)
         })
     }, [])

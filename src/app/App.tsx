@@ -1,4 +1,3 @@
-import "./App.css"
 import { StoryList } from "../features/StoryList/StoryList"
 import { StoryManager } from "../features/StoryManager"
 import { StoryAppearanceManager } from "../features/StoryAppearanceManager"
