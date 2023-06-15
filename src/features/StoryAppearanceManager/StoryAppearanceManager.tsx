@@ -17,8 +17,9 @@ export const StoryAppearanceManager = ({
     const appearanceManagerRef = useRef<any>()
 
     const initAppearanceManager = () => {
-        appearanceManagerRef.current = new window.IAS.AppearanceManager()
-        const appearanceManager = appearanceManagerRef.current
+        if (appearanceManagerRef.current) return
+        const appearanceManager = new window.IAS.AppearanceManager()
+        appearanceManagerRef.current = appearanceManager
 
         if (storyListOptions) appearanceManager.setStoriesListOptions(storyListOptions)
         if (readerOptions) appearanceManager.setStoryReaderOptions(readerOptions)
@@ -26,7 +27,7 @@ export const StoryAppearanceManager = ({
             appearanceManager.setStoryFavoriteReaderOptions(favoriteReaderOptions)
     }
 
-    if (!appearanceManagerRef.current) initAppearanceManager()
+    initAppearanceManager()
 
     return (
         <StoryAppearanceManagerContext.Provider value={appearanceManagerRef.current}>

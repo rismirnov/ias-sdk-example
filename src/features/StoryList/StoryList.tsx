@@ -11,35 +11,33 @@ export const StoryList = ({ onLoadStart, onLoadEnd }: StoryListProps) => {
     const storyManager = window.IAS.StoryManager.getInstance()
     const storyListRef = useRef<any>()
 
-    const initStoryList = () => {
-        const storyList = new storyManager.StoriesList(
-            "#stories_widget",
-            storyAppearanceManager,
-            { feed: "default" }
-        )
-        storyListRef.current = storyList
-    }
-
-    if (!storyListRef.current) initStoryList()
-
-    useEffect(() => {
-        storyListRef.current.on("startLoad", (loaderContainer: HTMLElement) => {
+    const bindStoryListEvents = (storyList: any) => {
+        storyList.on("startLoad", (loaderContainer: HTMLElement) => {
             loaderContainer.style.background = `url("https://inappstory.com/stories/loader.gif") center / 45px auto no-repeat transparent')`
             onLoadStart?.(loaderContainer)
         })
 
-        storyListRef.current.on(
+        storyList.on(
             "endLoad",
             (loaderContainer: HTMLElement, loadedStoriesLength: number) => {
                 loaderContainer.style.background = "none"
                 onLoadEnd?.(loaderContainer, loadedStoriesLength)
             }
         )
+    }
 
-        return () => {
-            // storyListRef.current.off
-        }
-    }, [])
+    const initStoryList = () => {
+        if (storyListRef.current) return
+        const storyList = new storyManager.StoriesList(
+            "#stories_widget",
+            storyAppearanceManager,
+            { feed: "onboarding" }
+        )
+        bindStoryListEvents(storyList)
+        storyListRef.current = storyList
+    }
+
+    initStoryList()
 
     return <div id="stories_widget"></div>
 }
