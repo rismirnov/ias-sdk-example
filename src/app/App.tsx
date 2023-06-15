@@ -1,5 +1,4 @@
 import { StoryList } from "../features/StoryList/StoryList"
-import { StoryManager } from "../features/StoryManager"
 import { StoryAppearanceManager } from "../features/StoryAppearanceManager"
 import { Container } from "./Container"
 import {
@@ -7,19 +6,21 @@ import {
     readerOptions,
     storyListOptions,
 } from "./story-appearance-options"
+import { useStoryManager } from "../features/StoryManager"
 
 function App() {
+    const { storyManager, isLoading } = useStoryManager()
+
     return (
         <Container>
-            <StoryManager>
-                <StoryAppearanceManager
-                    storyListOptions={storyListOptions}
-                    readerOptions={readerOptions}
-                    favoriteReaderOptions={favoriteReaderOptions}
-                >
-                    <StoryList />
-                </StoryAppearanceManager>
-            </StoryManager>
+            <StoryAppearanceManager
+                storyManager={storyManager}
+                storyListOptions={storyListOptions}
+                readerOptions={readerOptions}
+                favoriteReaderOptions={favoriteReaderOptions}
+            >
+                <StoryList />
+            </StoryAppearanceManager>
         </Container>
     )
 }

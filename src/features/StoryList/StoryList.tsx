@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useStoryAppearanceManager } from "../StoryAppearanceManager"
+import { useStoryList } from "./hooks/useStoryList"
 
 interface StoryListProps {
     onLoadStart?: (loaderContainer: HTMLElement) => void
@@ -7,9 +8,12 @@ interface StoryListProps {
 }
 
 export const StoryList = ({ onLoadStart, onLoadEnd }: StoryListProps) => {
-    const storyAppearanceManager = useStoryAppearanceManager()
-    const storyManager = window.IAS.StoryManager.getInstance()
-    const storyListRef = useRef<any>()
+    const appearanceManager = useStoryAppearanceManager()
+    const { storyList } = useStoryList({
+        id: "#stories_widget",
+        feed: "onboarding",
+        appearanceManager,
+    })
 
     const bindStoryListEvents = (storyList: any) => {
         storyList.on("startLoad", (loaderContainer: HTMLElement) => {
@@ -26,18 +30,10 @@ export const StoryList = ({ onLoadStart, onLoadEnd }: StoryListProps) => {
         )
     }
 
-    const initStoryList = () => {
-        if (storyListRef.current) return
-        const storyList = new storyManager.StoriesList(
-            "#stories_widget",
-            storyAppearanceManager,
-            { feed: "onboarding" }
-        )
+    useEffect(() => {
+        if (!storyList) return
         bindStoryListEvents(storyList)
-        storyListRef.current = storyList
-    }
-
-    initStoryList()
+    }, [storyList])
 
     return <div id="stories_widget"></div>
 }

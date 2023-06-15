@@ -1,36 +1,23 @@
-import React, { useRef } from "react"
+import React from "react"
 import { StoryAppearanceManagerContext } from "./storyAppearanceManagerContext"
+import { useStoryAppearanceManagerConfigurator } from "./hooks/useStoryAppearanceManagerConfigurator"
 
 interface StoryAppearanceManagerProps {
     storyListOptions?: any
     readerOptions?: any
     favoriteReaderOptions?: any
+    storyManager?: any
     children: React.ReactNode
 }
 
 export const StoryAppearanceManager = ({
-    storyListOptions,
-    readerOptions,
-    favoriteReaderOptions,
     children,
+    ...props
 }: StoryAppearanceManagerProps) => {
-    const appearanceManagerRef = useRef<any>()
-
-    const initAppearanceManager = () => {
-        if (appearanceManagerRef.current) return
-        const appearanceManager = new window.IAS.AppearanceManager()
-        appearanceManagerRef.current = appearanceManager
-
-        if (storyListOptions) appearanceManager.setStoriesListOptions(storyListOptions)
-        if (readerOptions) appearanceManager.setStoryReaderOptions(readerOptions)
-        if (favoriteReaderOptions)
-            appearanceManager.setStoryFavoriteReaderOptions(favoriteReaderOptions)
-    }
-
-    initAppearanceManager()
+    const { appearanceManager } = useStoryAppearanceManagerConfigurator(props)
 
     return (
-        <StoryAppearanceManagerContext.Provider value={appearanceManagerRef.current}>
+        <StoryAppearanceManagerContext.Provider value={appearanceManager}>
             {children}
         </StoryAppearanceManagerContext.Provider>
     )

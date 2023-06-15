@@ -1,1 +1,1 @@
-export { StoryManager } from "./StoryManager"
+export { useStoryManager } from "./hooks/useStoryManager"

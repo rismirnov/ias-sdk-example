@@ -1,12 +1,13 @@
 import React, { useRef } from "react"
-import { useInAppStorySDK } from "./hooks/useInAppStorySDK"
-import { storyManagerConfig } from "./storyManagerConfig"
+import { useInAppStorySDK } from "./useInAppStorySDK"
+import { storyManagerConfig } from "../storyManagerConfig"
 
-interface StoryManagerProps {
-    children: React.ReactNode
+interface UseStoryManagerResult {
+    storyManager: any
+    isLoading: boolean
 }
 
-export const StoryManager = ({ children }: StoryManagerProps) => {
+export const useStoryManager = (): UseStoryManagerResult => {
     const { isLoading, IAS } = useInAppStorySDK()
     const storyManagerRef = useRef<any>()
 
@@ -19,6 +20,8 @@ export const StoryManager = ({ children }: StoryManagerProps) => {
 
     initStoryManager()
 
-    if (isLoading) return null
-    return <>{children}</>
+    return {
+        storyManager: storyManagerRef.current,
+        isLoading,
+    }
 }
